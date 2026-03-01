@@ -370,31 +370,10 @@ async function initBlogPreview() {
 }
 
 // ──────────────────────────────────────────────────────────
-//  MENÚ MÓVIL (compartido)
-// ──────────────────────────────────────────────────────────
-
-function initMobileMenu() {
-    const menuBtn = document.getElementById('menu-toggle');
-    const mobileMenu = document.getElementById('mobile-menu');
-    if (!menuBtn || !mobileMenu) return;
-    menuBtn.addEventListener('click', () => {
-        mobileMenu.classList.toggle('hidden');
-        menuBtn.setAttribute('aria-expanded', String(!mobileMenu.classList.contains('hidden')));
-    });
-    mobileMenu.querySelectorAll('a').forEach(a =>
-        a.addEventListener('click', () => {
-            mobileMenu.classList.add('hidden');
-            menuBtn.setAttribute('aria-expanded', 'false');
-        })
-    );
-}
-
-// ──────────────────────────────────────────────────────────
 //  BOOT
 // ──────────────────────────────────────────────────────────
 
 document.addEventListener('DOMContentLoaded', () => {
-    initMobileMenu();
     initBlogPage();
     initBlogPreview();
 });
