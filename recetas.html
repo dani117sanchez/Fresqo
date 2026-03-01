@@ -1,0 +1,858 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description"
+        content="Descubre recetas deliciosas de Chop Suey con nuestro Mix de Verduras Fresqo. Rápidas, nutritivas y llenas de sabor." />
+    <title>Recetas de Chop Suey | Fresqo Mix de Verduras</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="/src/style.css" />
+    <style>
+        /* Estilos extra solo para la página de recetas */
+        .recipe-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .recipe-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 40px rgba(45, 90, 39, 0.18);
+        }
+
+        .tab-btn.active {
+            background-color: #2d5a27;
+            color: #fff;
+        }
+
+        .recipe-panel {
+            display: none;
+        }
+
+        .recipe-panel.active {
+            display: block;
+        }
+
+        @keyframes fade-in {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .recipe-panel.active {
+            animation: fade-in 0.35s ease;
+        }
+
+        .step-number {
+            width: 2rem;
+            height: 2rem;
+            background: #2d5a27;
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+            flex-shrink: 0;
+        }
+
+        .ingredient-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: #e8f7e4;
+            color: #2d5a27;
+            border-radius: 999px;
+            padding: 4px 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin: 3px;
+        }
+
+        .ingredient-pill.highlight {
+            background: #2d5a27;
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body class="font-sans bg-green-50 antialiased">
+
+    <!-- ============================================================
+         NAV — Compartida con index.html
+         ============================================================ -->
+    <header id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300" style="background: #2d5a27;"
+        role="banner">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <nav class="flex items-center justify-between h-16 md:h-20" aria-label="Navegación principal">
+                <!-- Logo -->
+                <a href="/index.html" class="flex items-center gap-2 group" aria-label="Fresqo - Inicio">
+                    <span class="text-2xl" aria-hidden="true">🌿</span>
+                    <span
+                        class="text-white font-bold text-xl tracking-tight group-hover:text-green-200 transition-colors">Fresqo</span>
+                </a>
+                <!-- Links desktop -->
+                <ul class="hidden md:flex items-center gap-8 list-none" role="list">
+                    <li><a href="/index.html"
+                            class="text-white/70 hover:text-white font-medium transition-colors">Inicio</a></li>
+                    <li><a href="/index.html#planes"
+                            class="text-white/70 hover:text-white font-medium transition-colors">Planes</a></li>
+                    <li><a href="/recetas.html"
+                            class="text-white font-medium border-b-2 border-green-300 pb-1">Recetas</a></li>
+                    <li><a href="/index.html#contacto"
+                            class="text-white/70 hover:text-white font-medium transition-colors">Contacto</a></li>
+                </ul>
+                <!-- CTA desktop -->
+                <a href="/index.html#planes"
+                    class="hidden md:inline-flex items-center gap-2 bg-white text-green-800 font-semibold px-5 py-2.5 rounded-full hover:bg-green-100 transition-all duration-200 shadow-md">
+                    Ver Planes
+                </a>
+                <!-- Hamburger móvil -->
+                <button id="menu-toggle"
+                    class="md:hidden text-white p-2 rounded-lg hover:bg-white/20 transition-colors focus:outline-none focus:ring-2 focus:ring-white"
+                    aria-label="Abrir menú" aria-expanded="false" aria-controls="mobile-menu">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+            </nav>
+            <!-- Menú móvil -->
+            <div id="mobile-menu"
+                class="hidden md:hidden bg-green-900/95 backdrop-blur-md rounded-2xl mb-3 overflow-hidden shadow-xl"
+                role="navigation" aria-label="Menú móvil">
+                <ul class="flex flex-col py-3 list-none" role="list">
+                    <li><a href="/index.html"
+                            class="block px-6 py-3 text-white/80 hover:bg-white/10 transition-colors">Inicio</a></li>
+                    <li><a href="/index.html#planes"
+                            class="block px-6 py-3 text-white/80 hover:bg-white/10 transition-colors">Planes</a></li>
+                    <li><a href="/recetas.html"
+                            class="block px-6 py-3 text-white font-semibold hover:bg-white/10 transition-colors">Recetas</a>
+                    </li>
+                    <li><a href="/index.html#contacto"
+                            class="block px-6 py-3 text-white/80 hover:bg-white/10 transition-colors">Contacto</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <main>
+
+        <!-- ============================================================
+           HERO DE RECETAS
+           ============================================================ -->
+        <section class="pt-28 pb-16 md:pt-36 md:pb-24 relative overflow-hidden"
+            style="background: linear-gradient(135deg, #1a3a14 0%, #2d5a27 60%, #3d7a35 100%);"
+            aria-labelledby="recetas-hero-heading">
+            <!-- Hoja decorativa -->
+            <div class="absolute bottom-0 left-6 opacity-10 leaf-float hidden md:block" aria-hidden="true">
+                <svg width="120" height="130" viewBox="0 0 120 130" fill="none">
+                    <path d="M10 120 Q60 10 110 25 Q70 95 10 120Z" fill="#a3d89a" />
+                    <line x1="10" y1="120" x2="90" y2="30" stroke="#a3d89a" stroke-width="2" opacity="0.6" />
+                </svg>
+            </div>
+
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <p
+                    class="inline-flex items-center gap-2 bg-white/10 text-green-200 text-sm font-medium px-4 py-1.5 rounded-full mb-5 backdrop-blur-sm">
+                    <span aria-hidden="true">🥢</span> Recetas con nuestro Mix
+                </p>
+                <h1 id="recetas-hero-heading" class="text-4xl sm:text-5xl font-extrabold text-white mb-5 leading-tight">
+                    Chop Suey con<br /><span class="text-green-300">Mix de Verduras Fresqo</span>
+                </h1>
+                <p class="text-green-100/80 text-base sm:text-lg leading-relaxed max-w-2xl mx-auto mb-8">
+                    Nuestro mix de verduras premium trae todo lo que necesitas listo para cocinar: brócoli, zanahoria,
+                    apio, pimentón, brotes de soya y más. En minutos tienes un plato lleno de color, fibra y sabor.
+                </p>
+                <!-- Stats rápidas -->
+                <div class="flex flex-wrap justify-center gap-6 mt-8">
+                    <div class="text-center">
+                        <p class="text-3xl font-extrabold text-white">4</p>
+                        <p class="text-green-300 text-sm font-medium">Recetas incluidas</p>
+                    </div>
+                    <div class="w-px bg-white/10 hidden sm:block"></div>
+                    <div class="text-center">
+                        <p class="text-3xl font-extrabold text-white">⏱ 15'</p>
+                        <p class="text-green-300 text-sm font-medium">Tiempo promedio</p>
+                    </div>
+                    <div class="w-px bg-white/10 hidden sm:block"></div>
+                    <div class="text-center">
+                        <p class="text-3xl font-extrabold text-white">🌿</p>
+                        <p class="text-green-300 text-sm font-medium">100% natural</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Wave -->
+            <div class="absolute bottom-0 left-0 right-0" aria-hidden="true">
+                <svg viewBox="0 0 1440 60" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+                    <path d="M0 60L1440 60L1440 20C1200 55 960 5 720 30C480 55 240 0 0 20L0 60Z" fill="#f2faf0" />
+                </svg>
+            </div>
+        </section>
+
+        <!-- ============================================================
+           SOBRE EL PRODUCTO — Mix de Verduras
+           ============================================================ -->
+        <section class="py-16 bg-green-50" aria-labelledby="mix-heading">
+            <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="bg-white rounded-3xl shadow-sm border border-green-100 p-8 md:p-12">
+                    <div class="flex flex-col md:flex-row gap-10 items-center">
+                        <!-- Ícono/foto del mix -->
+                        <div class="flex-shrink-0">
+                            <div
+                                class="w-40 h-40 md:w-52 md:h-52 rounded-3xl overflow-hidden shadow-lg bg-green-100 flex items-center justify-center">
+                                <img src="https://images.unsplash.com/photo-1540420773420-3366772f4999?w=400&q=80"
+                                    alt="Mix de verduras frescas para Chop Suey: brócoli, zanahoria, apio, pimentón y brotes"
+                                    class="w-full h-full object-cover" loading="lazy" />
+                            </div>
+                        </div>
+                        <!-- Info -->
+                        <div class="flex-1">
+                            <h2 id="mix-heading" class="text-2xl md:text-3xl font-bold text-green-900 mb-3">
+                                🥡 Nuestro Mix de Verduras para Chop Suey
+                            </h2>
+                            <p class="text-green-700/80 text-sm md:text-base leading-relaxed mb-5">
+                                Una mezcla cuidadosamente seleccionada de verduras frescas, cortadas en juliana y listas
+                                para el wok. Sin conservantes, sin aditivos — solo vegetales en su punto ideal de
+                                frescura y textura crujiente.
+                            </p>
+                            <p class="text-sm font-semibold text-green-900 mb-3">Contiene:</p>
+                            <div class="flex flex-wrap gap-1">
+                                <span class="ingredient-pill highlight">⭐ Brócoli</span>
+                                <span class="ingredient-pill highlight">⭐ Brotes de Soya</span>
+                                <span class="ingredient-pill">🥕 Zanahoria</span>
+                                <span class="ingredient-pill">🌿 Apio</span>
+                                <span class="ingredient-pill">🫑 Pimentón</span>
+                                <span class="ingredient-pill">🧅 Cebolla</span>
+                                <span class="ingredient-pill">🫛 Arveja China</span>
+                                <span class="ingredient-pill">🌱 Col China</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================================
+           RECETAS — Tabs con 4 recetas
+           ============================================================ -->
+        <section class="py-16 md:py-24 bg-white" aria-labelledby="recetas-section-heading">
+            <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+
+                <div class="text-center mb-12">
+                    <p class="text-green-600 font-semibold text-sm uppercase tracking-widest mb-3">Libro de recetas</p>
+                    <h2 id="recetas-section-heading" class="text-3xl md:text-4xl font-bold text-green-900">
+                        Elige tu <span class="text-green-600">receta favorita</span>
+                    </h2>
+                </div>
+
+                <!-- Tabs de navegación -->
+                <div class="flex flex-wrap justify-center gap-2 mb-10" role="tablist" aria-label="Seleccionar receta">
+                    <button id="tab-clasico"
+                        class="tab-btn active px-5 py-2.5 rounded-full border-2 border-green-800 font-semibold text-sm transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-green-300"
+                        role="tab" aria-selected="true" aria-controls="panel-clasico" data-tab="clasico">🍗 Clásico con
+                        Pollo</button>
+                    <button id="tab-res"
+                        class="tab-btn px-5 py-2.5 rounded-full border-2 border-green-200 text-green-800 font-semibold text-sm transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-green-300"
+                        role="tab" aria-selected="false" aria-controls="panel-res" data-tab="res">🥩 Con Res</button>
+                    <button id="tab-camarones"
+                        class="tab-btn px-5 py-2.5 rounded-full border-2 border-green-200 text-green-800 font-semibold text-sm transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-green-300"
+                        role="tab" aria-selected="false" aria-controls="panel-camarones" data-tab="camarones">🍤 Con
+                        Camarones</button>
+                    <button id="tab-vegano"
+                        class="tab-btn px-5 py-2.5 rounded-full border-2 border-green-200 text-green-800 font-semibold text-sm transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-green-300"
+                        role="tab" aria-selected="false" aria-controls="panel-vegano" data-tab="vegano">🌱
+                        Vegano</button>
+                </div>
+
+                <!-- ══════════════════════════════════════
+               RECETA 1 — Chop Suey Clásico con Pollo
+               ══════════════════════════════════════ -->
+                <div id="panel-clasico" class="recipe-panel active" role="tabpanel" aria-labelledby="tab-clasico">
+                    <div class="bg-green-50 rounded-3xl p-6 md:p-10 border border-green-100">
+                        <div class="flex flex-col md:flex-row gap-8 mb-8">
+                            <div class="flex-1">
+                                <h3 class="text-2xl font-bold text-green-900 mb-2">🍗 Chop Suey Clásico con Pollo</h3>
+                                <p class="text-green-700/80 text-sm mb-5 leading-relaxed">
+                                    La receta de toda la vida, perfecta para el almuerzo familiar. El pollo jugoso
+                                    combinado con el crujiente de nuestro mix crea una armonía de texturas y sabores
+                                    irresistible.
+                                </p>
+                                <!-- Meta -->
+                                <div class="flex flex-wrap gap-4 mb-6">
+                                    <div
+                                        class="flex items-center gap-2 bg-white rounded-xl px-4 py-2 shadow-sm text-sm">
+                                        <span aria-hidden="true">⏱</span>
+                                        <div>
+                                            <p class="font-semibold text-green-900">10 min</p>
+                                            <p class="text-green-500 text-xs">Preparación</p>
+                                        </div>
+                                    </div>
+                                    <div
+                                        class="flex items-center gap-2 bg-white rounded-xl px-4 py-2 shadow-sm text-sm">
+                                        <span aria-hidden="true">🔥</span>
+                                        <div>
+                                            <p class="font-semibold text-green-900">15 min</p>
+                                            <p class="text-green-500 text-xs">Cocción</p>
+                                        </div>
+                                    </div>
+                                    <div
+                                        class="flex items-center gap-2 bg-white rounded-xl px-4 py-2 shadow-sm text-sm">
+                                        <span aria-hidden="true">🍽️</span>
+                                        <div>
+                                            <p class="font-semibold text-green-900">2–3</p>
+                                            <p class="text-green-500 text-xs">Porciones</p>
+                                        </div>
+                                    </div>
+                                    <div
+                                        class="flex items-center gap-2 bg-white rounded-xl px-4 py-2 shadow-sm text-sm">
+                                        <span aria-hidden="true">💪</span>
+                                        <div>
+                                            <p class="font-semibold text-green-900">~380 kcal</p>
+                                            <p class="text-green-500 text-xs">Por porción</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="md:w-64 flex-shrink-0">
+                                <div class="rounded-2xl overflow-hidden shadow-md h-44 md:h-full">
+                                    <img src="https://images.unsplash.com/photo-1563245372-f21724e3856d?w=500&q=80"
+                                        alt="Chop Suey clásico con pollo salteado y verduras coloridas en wok"
+                                        class="w-full h-full object-cover" loading="lazy" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <!-- Ingredientes -->
+                            <div>
+                                <h4 class="text-lg font-bold text-green-900 mb-4 flex items-center gap-2">
+                                    <span class="text-2xl" aria-hidden="true">🛒</span> Ingredientes
+                                </h4>
+                                <ul class="space-y-2 text-sm text-green-800 list-none" role="list">
+                                    <li
+                                        class="flex items-center gap-2 font-semibold text-green-700 bg-green-100 rounded-xl px-3 py-2">
+                                        <span aria-hidden="true">⭐</span> 1 bolsa Mix de Verduras Fresqo (500g)
+                                    </li>
+                                    <li class="flex items-center gap-2 py-1.5 border-b border-green-100">
+                                        <span class="text-green-500" aria-hidden="true">•</span> 300g de pechuga de
+                                        pollo en tiras
+                                    </li>
+                                    <li class="flex items-center gap-2 py-1.5 border-b border-green-100">
+                                        <span class="text-green-500" aria-hidden="true">•</span> 3 cdas de salsa de soya
+                                        (soy sauce)
+                                    </li>
+                                    <li class="flex items-center gap-2 py-1.5 border-b border-green-100">
+                                        <span class="text-green-500" aria-hidden="true">•</span> 1 cda de salsa de
+                                        ostras
+                                    </li>
+                                    <li class="flex items-center gap-2 py-1.5 border-b border-green-100">
+                                        <span class="text-green-500" aria-hidden="true">•</span> 1 cda de aceite de
+                                        ajonjolí (sésamo)
+                                    </li>
+                                    <li class="flex items-center gap-2 py-1.5 border-b border-green-100">
+                                        <span class="text-green-500" aria-hidden="true">•</span> 3 dientes de ajo
+                                        picados
+                                    </li>
+                                    <li class="flex items-center gap-2 py-1.5 border-b border-green-100">
+                                        <span class="text-green-500" aria-hidden="true">•</span> 1 trozo de jengibre
+                                        fresco (rallado)
+                                    </li>
+                                    <li class="flex items-center gap-2 py-1.5 border-b border-green-100">
+                                        <span class="text-green-500" aria-hidden="true">•</span> 1 cda de maicena + 2
+                                        cdas de agua
+                                    </li>
+                                    <li class="flex items-center gap-2 py-1.5">
+                                        <span class="text-green-500" aria-hidden="true">•</span> Aceite de girasol, sal
+                                        y pimienta
+                                    </li>
+                                </ul>
+                            </div>
+                            <!-- Pasos -->
+                            <div>
+                                <h4 class="text-lg font-bold text-green-900 mb-4 flex items-center gap-2">
+                                    <span class="text-2xl" aria-hidden="true">👨‍🍳</span> Preparación
+                                </h4>
+                                <ol class="space-y-4 list-none" role="list">
+                                    <li class="flex gap-3 items-start text-sm text-green-800">
+                                        <span class="step-number" aria-hidden="true">1</span>
+                                        <p>Marina el pollo con 1 cda de salsa de soya, ajo y jengibre por 5 minutos.</p>
+                                    </li>
+                                    <li class="flex gap-3 items-start text-sm text-green-800">
+                                        <span class="step-number" aria-hidden="true">2</span>
+                                        <p>Calienta el wok a fuego alto con aceite. Saltea el pollo 5–6 min hasta dorar.
+                                            Retira.</p>
+                                    </li>
+                                    <li class="flex gap-3 items-start text-sm text-green-800">
+                                        <span class="step-number" aria-hidden="true">3</span>
+                                        <p>En el mismo wok, agrega el <strong>Mix Fresqo</strong> y saltea 3–4 min a
+                                            fuego alto. Las verduras deben quedar crujientes.</p>
+                                    </li>
+                                    <li class="flex gap-3 items-start text-sm text-green-800">
+                                        <span class="step-number" aria-hidden="true">4</span>
+                                        <p>Regresa el pollo. Añade salsa de soya, salsa de ostras y aceite de ajonjolí.
+                                            Mezcla bien.</p>
+                                    </li>
+                                    <li class="flex gap-3 items-start text-sm text-green-800">
+                                        <span class="step-number" aria-hidden="true">5</span>
+                                        <p>Agrega la maicena disuelta en agua, revuelve 1 min hasta que la salsa espese.
+                                            ¡Sirve inmediatamente!</p>
+                                    </li>
+                                </ol>
+                                <div class="mt-5 bg-green-100 rounded-2xl p-4 text-xs text-green-800">
+                                    💡 <strong>Tip Fresqo:</strong> Para mejor resultado, el wok debe estar muy
+                                    caliente antes de agregar el mix. Esto garantiza el "wok hei" — ese aroma y textura
+                                    inconfundible del chop suey auténtico.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ══════════════════════════════════════
+               RECETA 2 — Chop Suey con Res
+               ══════════════════════════════════════ -->
+                <div id="panel-res" class="recipe-panel" role="tabpanel" aria-labelledby="tab-res">
+                    <div class="bg-green-50 rounded-3xl p-6 md:p-10 border border-green-100">
+                        <div class="flex flex-col md:flex-row gap-8 mb-8">
+                            <div class="flex-1">
+                                <h3 class="text-2xl font-bold text-green-900 mb-2">🥩 Chop Suey con Res y Salsa Teriyaki
+                                </h3>
+                                <p class="text-green-700/80 text-sm mb-5 leading-relaxed">
+                                    Una versión potente y proteica ideal para quienes entrenan. El lomito de res en
+                                    tiras absorbe la salsa teriyaki y se complementa perfectamente con el crujiente del
+                                    mix.
+                                </p>
+                                <div class="flex flex-wrap gap-4 mb-6">
+                                    <div
+                                        class="flex items-center gap-2 bg-white rounded-xl px-4 py-2 shadow-sm text-sm">
+                                        <span aria-hidden="true">⏱</span>
+                                        <div>
+                                            <p class="font-semibold text-green-900">15 min</p>
+                                            <p class="text-green-500 text-xs">Preparación</p>
+                                        </div>
+                                    </div>
+                                    <div
+                                        class="flex items-center gap-2 bg-white rounded-xl px-4 py-2 shadow-sm text-sm">
+                                        <span aria-hidden="true">🔥</span>
+                                        <div>
+                                            <p class="font-semibold text-green-900">12 min</p>
+                                            <p class="text-green-500 text-xs">Cocción</p>
+                                        </div>
+                                    </div>
+                                    <div
+                                        class="flex items-center gap-2 bg-white rounded-xl px-4 py-2 shadow-sm text-sm">
+                                        <span aria-hidden="true">🍽️</span>
+                                        <div>
+                                            <p class="font-semibold text-green-900">2–3</p>
+                                            <p class="text-green-500 text-xs">Porciones</p>
+                                        </div>
+                                    </div>
+                                    <div
+                                        class="flex items-center gap-2 bg-white rounded-xl px-4 py-2 shadow-sm text-sm">
+                                        <span aria-hidden="true">💪</span>
+                                        <div>
+                                            <p class="font-semibold text-green-900">~430 kcal</p>
+                                            <p class="text-green-500 text-xs">Por porción</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="md:w-64 flex-shrink-0">
+                                <div class="rounded-2xl overflow-hidden shadow-md h-44 md:h-full">
+                                    <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=500&q=80"
+                                        alt="Chop Suey con tiras de res y verduras salteadas con salsa teriyaki"
+                                        class="w-full h-full object-cover" loading="lazy" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div>
+                                <h4 class="text-lg font-bold text-green-900 mb-4 flex items-center gap-2">
+                                    <span class="text-2xl" aria-hidden="true">🛒</span> Ingredientes
+                                </h4>
+                                <ul class="space-y-2 text-sm text-green-800 list-none" role="list">
+                                    <li
+                                        class="flex items-center gap-2 font-semibold text-green-700 bg-green-100 rounded-xl px-3 py-2">
+                                        <span aria-hidden="true">⭐</span> 1 bolsa Mix de Verduras Fresqo (500g)
+                                    </li>
+                                    <li class="flex items-center gap-2 py-1.5 border-b border-green-100"><span
+                                            class="text-green-500" aria-hidden="true">•</span> 350g de lomito o falda de
+                                        res, en tiras finas</li>
+                                    <li class="flex items-center gap-2 py-1.5 border-b border-green-100"><span
+                                            class="text-green-500" aria-hidden="true">•</span> 3 cdas de salsa teriyaki
+                                    </li>
+                                    <li class="flex items-center gap-2 py-1.5 border-b border-green-100"><span
+                                            class="text-green-500" aria-hidden="true">•</span> 2 cdas de salsa de soya
+                                    </li>
+                                    <li class="flex items-center gap-2 py-1.5 border-b border-green-100"><span
+                                            class="text-green-500" aria-hidden="true">•</span> 1 cda de aceite de
+                                        ajonjolí</li>
+                                    <li class="flex items-center gap-2 py-1.5 border-b border-green-100"><span
+                                            class="text-green-500" aria-hidden="true">•</span> 4 dientes de ajo</li>
+                                    <li class="flex items-center gap-2 py-1.5 border-b border-green-100"><span
+                                            class="text-green-500" aria-hidden="true">•</span> Jengibre fresco rallado
+                                    </li>
+                                    <li class="flex items-center gap-2 py-1.5 border-b border-green-100"><span
+                                            class="text-green-500" aria-hidden="true">•</span> 1 cda de miel de abeja
+                                    </li>
+                                    <li class="flex items-center gap-2 py-1.5"><span class="text-green-500"
+                                            aria-hidden="true">•</span> Semillas de ajonjolí para decorar</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h4 class="text-lg font-bold text-green-900 mb-4 flex items-center gap-2">
+                                    <span class="text-2xl" aria-hidden="true">👨‍🍳</span> Preparación
+                                </h4>
+                                <ol class="space-y-4 list-none" role="list">
+                                    <li class="flex gap-3 items-start text-sm text-green-800">
+                                        <span class="step-number" aria-hidden="true">1</span>
+                                        <p>Mezcla teriyaki, soya, miel y jengibre. Marina la res 10 minutos.</p>
+                                    </li>
+                                    <li class="flex gap-3 items-start text-sm text-green-800">
+                                        <span class="step-number" aria-hidden="true">2</span>
+                                        <p>Sella la res en wok muy caliente con aceite, 2–3 min. Reserva.</p>
+                                    </li>
+                                    <li class="flex gap-3 items-start text-sm text-green-800">
+                                        <span class="step-number" aria-hidden="true">3</span>
+                                        <p>Saltea el ajo 30 seg, agrega el <strong>Mix Fresqo</strong> a fuego máximo
+                                            4 min.</p>
+                                    </li>
+                                    <li class="flex gap-3 items-start text-sm text-green-800">
+                                        <span class="step-number" aria-hidden="true">4</span>
+                                        <p>Incorpora la res y vierte la marinada restante. Cocina 2 min más.</p>
+                                    </li>
+                                    <li class="flex gap-3 items-start text-sm text-green-800">
+                                        <span class="step-number" aria-hidden="true">5</span>
+                                        <p>Decora con ajonjolí y sirve sobre arroz jazmín o fideos de arroz.</p>
+                                    </li>
+                                </ol>
+                                <div class="mt-5 bg-green-100 rounded-2xl p-4 text-xs text-green-800">
+                                    💡 <strong>Tip Fresqo:</strong> Corta la res en tiras muy finas y siempre en
+                                    contra de la fibra — así queda más tierna en el wok.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ══════════════════════════════════════
+               RECETA 3 — Chop Suey con Camarones
+               ══════════════════════════════════════ -->
+                <div id="panel-camarones" class="recipe-panel" role="tabpanel" aria-labelledby="tab-camarones">
+                    <div class="bg-green-50 rounded-3xl p-6 md:p-10 border border-green-100">
+                        <div class="flex flex-col md:flex-row gap-8 mb-8">
+                            <div class="flex-1">
+                                <h3 class="text-2xl font-bold text-green-900 mb-2">🍤 Chop Suey de Camarones al Limón
+                                </h3>
+                                <p class="text-green-700/80 text-sm mb-5 leading-relaxed">
+                                    Ligero, fresco y sofisticado. Los camarones se cocinan en minutos y se llevan de
+                                    maravilla con el toque cítrico y el crujiente de los vegetales del mix. Ideal para
+                                    cenar.
+                                </p>
+                                <div class="flex flex-wrap gap-4 mb-6">
+                                    <div
+                                        class="flex items-center gap-2 bg-white rounded-xl px-4 py-2 shadow-sm text-sm">
+                                        <span aria-hidden="true">⏱</span>
+                                        <div>
+                                            <p class="font-semibold text-green-900">10 min</p>
+                                            <p class="text-green-500 text-xs">Preparación</p>
+                                        </div>
+                                    </div>
+                                    <div
+                                        class="flex items-center gap-2 bg-white rounded-xl px-4 py-2 shadow-sm text-sm">
+                                        <span aria-hidden="true">🔥</span>
+                                        <div>
+                                            <p class="font-semibold text-green-900">10 min</p>
+                                            <p class="text-green-500 text-xs">Cocción</p>
+                                        </div>
+                                    </div>
+                                    <div
+                                        class="flex items-center gap-2 bg-white rounded-xl px-4 py-2 shadow-sm text-sm">
+                                        <span aria-hidden="true">🍽️</span>
+                                        <div>
+                                            <p class="font-semibold text-green-900">2</p>
+                                            <p class="text-green-500 text-xs">Porciones</p>
+                                        </div>
+                                    </div>
+                                    <div
+                                        class="flex items-center gap-2 bg-white rounded-xl px-4 py-2 shadow-sm text-sm">
+                                        <span aria-hidden="true">💪</span>
+                                        <div>
+                                            <p class="font-semibold text-green-900">~290 kcal</p>
+                                            <p class="text-green-500 text-xs">Por porción</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="md:w-64 flex-shrink-0">
+                                <div class="rounded-2xl overflow-hidden shadow-md h-44 md:h-full">
+                                    <img src="https://images.unsplash.com/photo-1559847844-5315695dadae?w=500&q=80"
+                                        alt="Chop Suey de camarones salteados con verduras y salsa de limón"
+                                        class="w-full h-full object-cover" loading="lazy" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div>
+                                <h4 class="text-lg font-bold text-green-900 mb-4 flex items-center gap-2">
+                                    <span class="text-2xl" aria-hidden="true">🛒</span> Ingredientes
+                                </h4>
+                                <ul class="space-y-2 text-sm text-green-800 list-none" role="list">
+                                    <li
+                                        class="flex items-center gap-2 font-semibold text-green-700 bg-green-100 rounded-xl px-3 py-2">
+                                        <span aria-hidden="true">⭐</span> 1 bolsa Mix de Verduras Fresqo (500g)
+                                    </li>
+                                    <li class="flex items-center gap-2 py-1.5 border-b border-green-100"><span
+                                            class="text-green-500" aria-hidden="true">•</span> 300g de camarones
+                                        medianos, pelados</li>
+                                    <li class="flex items-center gap-2 py-1.5 border-b border-green-100"><span
+                                            class="text-green-500" aria-hidden="true">•</span> Jugo de 2 limones</li>
+                                    <li class="flex items-center gap-2 py-1.5 border-b border-green-100"><span
+                                            class="text-green-500" aria-hidden="true">•</span> 2 cdas de salsa de soya
+                                    </li>
+                                    <li class="flex items-center gap-2 py-1.5 border-b border-green-100"><span
+                                            class="text-green-500" aria-hidden="true">•</span> 1 cda de aceite de
+                                        ajonjolí</li>
+                                    <li class="flex items-center gap-2 py-1.5 border-b border-green-100"><span
+                                            class="text-green-500" aria-hidden="true">•</span> 3 dientes de ajo</li>
+                                    <li class="flex items-center gap-2 py-1.5 border-b border-green-100"><span
+                                            class="text-green-500" aria-hidden="true">•</span> 1/2 cda de salsa picante
+                                        (opcional)</li>
+                                    <li class="flex items-center gap-2 py-1.5"><span class="text-green-500"
+                                            aria-hidden="true">•</span> Cebollín y cilantro para decorar</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h4 class="text-lg font-bold text-green-900 mb-4 flex items-center gap-2">
+                                    <span class="text-2xl" aria-hidden="true">👨‍🍳</span> Preparación
+                                </h4>
+                                <ol class="space-y-4 list-none" role="list">
+                                    <li class="flex gap-3 items-start text-sm text-green-800">
+                                        <span class="step-number" aria-hidden="true">1</span>
+                                        <p>Marina los camarones con limón, ajo y soya por 5 minutos.</p>
+                                    </li>
+                                    <li class="flex gap-3 items-start text-sm text-green-800">
+                                        <span class="step-number" aria-hidden="true">2</span>
+                                        <p>Saltea los camarones en wok caliente 2 min por lado. Retira cuando estén
+                                            rosados.</p>
+                                    </li>
+                                    <li class="flex gap-3 items-start text-sm text-green-800">
+                                        <span class="step-number" aria-hidden="true">3</span>
+                                        <p>Saltea el <strong>Mix Fresqo</strong> en el mismo wok 3–4 min a fuego
+                                            alto.</p>
+                                    </li>
+                                    <li class="flex gap-3 items-start text-sm text-green-800">
+                                        <span class="step-number" aria-hidden="true">4</span>
+                                        <p>Vuelve a agregar los camarones, añade aceite de ajonjolí y salsa picante.
+                                            Mezcla 1 min.</p>
+                                    </li>
+                                    <li class="flex gap-3 items-start text-sm text-green-800">
+                                        <span class="step-number" aria-hidden="true">5</span>
+                                        <p>Sirve inmediatamente decorado con cebollín y cilantro fresco.</p>
+                                    </li>
+                                </ol>
+                                <div class="mt-5 bg-green-100 rounded-2xl p-4 text-xs text-green-800">
+                                    💡 <strong>Tip Fresqo:</strong> Los camarones se cocinan muy rápido — no los
+                                    dejes más de 2 min por lado o quedan gomosos.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ══════════════════════════════════════
+               RECETA 4 — Chop Suey Vegano
+               ══════════════════════════════════════ -->
+                <div id="panel-vegano" class="recipe-panel" role="tabpanel" aria-labelledby="tab-vegano">
+                    <div class="bg-green-50 rounded-3xl p-6 md:p-10 border border-green-100">
+                        <div class="flex flex-col md:flex-row gap-8 mb-8">
+                            <div class="flex-1">
+                                <h3 class="text-2xl font-bold text-green-900 mb-2">🌱 Chop Suey Vegano con Tofu Crocante
+                                </h3>
+                                <p class="text-green-700/80 text-sm mb-5 leading-relaxed">
+                                    100% plantas. El tofu firme bien prensado y sellado adquiere una textura increíble
+                                    que complementa la frescura del mix. Proteína vegetal completa en un solo plato.
+                                </p>
+                                <div class="flex flex-wrap gap-4 mb-6">
+                                    <div
+                                        class="flex items-center gap-2 bg-white rounded-xl px-4 py-2 shadow-sm text-sm">
+                                        <span aria-hidden="true">⏱</span>
+                                        <div>
+                                            <p class="font-semibold text-green-900">15 min</p>
+                                            <p class="text-green-500 text-xs">Preparación</p>
+                                        </div>
+                                    </div>
+                                    <div
+                                        class="flex items-center gap-2 bg-white rounded-xl px-4 py-2 shadow-sm text-sm">
+                                        <span aria-hidden="true">🔥</span>
+                                        <div>
+                                            <p class="font-semibold text-green-900">15 min</p>
+                                            <p class="text-green-500 text-xs">Cocción</p>
+                                        </div>
+                                    </div>
+                                    <div
+                                        class="flex items-center gap-2 bg-white rounded-xl px-4 py-2 shadow-sm text-sm">
+                                        <span aria-hidden="true">🍽️</span>
+                                        <div>
+                                            <p class="font-semibold text-green-900">2–3</p>
+                                            <p class="text-green-500 text-xs">Porciones</p>
+                                        </div>
+                                    </div>
+                                    <div
+                                        class="flex items-center gap-2 bg-white rounded-xl px-4 py-2 shadow-sm text-sm">
+                                        <span aria-hidden="true">💪</span>
+                                        <div>
+                                            <p class="font-semibold text-green-900">~320 kcal</p>
+                                            <p class="text-green-500 text-xs">Por porción</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="md:w-64 flex-shrink-0">
+                                <div class="rounded-2xl overflow-hidden shadow-md h-44 md:h-full">
+                                    <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=500&q=80"
+                                        alt="Chop Suey vegano con tofu crocante y mix de verduras coloridas"
+                                        class="w-full h-full object-cover" loading="lazy" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div>
+                                <h4 class="text-lg font-bold text-green-900 mb-4 flex items-center gap-2">
+                                    <span class="text-2xl" aria-hidden="true">🛒</span> Ingredientes
+                                </h4>
+                                <ul class="space-y-2 text-sm text-green-800 list-none" role="list">
+                                    <li
+                                        class="flex items-center gap-2 font-semibold text-green-700 bg-green-100 rounded-xl px-3 py-2">
+                                        <span aria-hidden="true">⭐</span> 1 bolsa Mix de Verduras Fresqo (500g)
+                                    </li>
+                                    <li class="flex items-center gap-2 py-1.5 border-b border-green-100"><span
+                                            class="text-green-500" aria-hidden="true">•</span> 400g de tofu firme, en
+                                        cubos</li>
+                                    <li class="flex items-center gap-2 py-1.5 border-b border-green-100"><span
+                                            class="text-green-500" aria-hidden="true">•</span> 3 cdas de salsa de soya
+                                        (tamari para sin gluten)</li>
+                                    <li class="flex items-center gap-2 py-1.5 border-b border-green-100"><span
+                                            class="text-green-500" aria-hidden="true">•</span> 1 cda de pasta de miso
+                                    </li>
+                                    <li class="flex items-center gap-2 py-1.5 border-b border-green-100"><span
+                                            class="text-green-500" aria-hidden="true">•</span> 1 cda de aceite de
+                                        ajonjolí</li>
+                                    <li class="flex items-center gap-2 py-1.5 border-b border-green-100"><span
+                                            class="text-green-500" aria-hidden="true">•</span> 1 cda de vinagre de arroz
+                                    </li>
+                                    <li class="flex items-center gap-2 py-1.5 border-b border-green-100"><span
+                                            class="text-green-500" aria-hidden="true">•</span> 4 dientes de ajo</li>
+                                    <li class="flex items-center gap-2 py-1.5"><span class="text-green-500"
+                                            aria-hidden="true">•</span> Maicena para rebozar el tofu</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h4 class="text-lg font-bold text-green-900 mb-4 flex items-center gap-2">
+                                    <span class="text-2xl" aria-hidden="true">👨‍🍳</span> Preparación
+                                </h4>
+                                <ol class="space-y-4 list-none" role="list">
+                                    <li class="flex gap-3 items-start text-sm text-green-800">
+                                        <span class="step-number" aria-hidden="true">1</span>
+                                        <p>Prensa el tofu con papel absorbente 10 min. Córtalo en cubos y rebózalo en
+                                            maicena.</p>
+                                    </li>
+                                    <li class="flex gap-3 items-start text-sm text-green-800">
+                                        <span class="step-number" aria-hidden="true">2</span>
+                                        <p>Dora el tofu en aceite caliente hasta que esté crocante por todos los lados.
+                                            Reserva.</p>
+                                    </li>
+                                    <li class="flex gap-3 items-start text-sm text-green-800">
+                                        <span class="step-number" aria-hidden="true">3</span>
+                                        <p>Saltea el ajo, agrega el <strong>Mix Fresqo</strong> y cocina 4 min a
+                                            fuego alto.</p>
+                                    </li>
+                                    <li class="flex gap-3 items-start text-sm text-green-800">
+                                        <span class="step-number" aria-hidden="true">4</span>
+                                        <p>Mezcla soya, miso, vinagre y aceite de ajonjolí. Vierte sobre las verduras.
+                                        </p>
+                                    </li>
+                                    <li class="flex gap-3 items-start text-sm text-green-800">
+                                        <span class="step-number" aria-hidden="true">5</span>
+                                        <p>Incorpora el tofu crocante con cuidado. Sirve sobre quinoa o arroz integral.
+                                        </p>
+                                    </li>
+                                </ol>
+                                <div class="mt-5 bg-green-100 rounded-2xl p-4 text-xs text-green-800">
+                                    💡 <strong>Tip Fresqo:</strong> El tofu prensado y rebozado en maicena es el
+                                    secreto para conseguir esa textura crujiente por fuera y suave por dentro.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ============================================================
+           CTA — Comprar Mix Fresqo
+           ============================================================ -->
+        <section class="py-20 md:py-24" style="background: linear-gradient(135deg, #1a3a14 0%, #2d5a27 100%);"
+            aria-labelledby="cta-recetas-heading">
+            <div class="max-w-3xl mx-auto px-4 sm:px-6 text-center">
+                <div class="text-5xl mb-6" aria-hidden="true">🥡</div>
+                <h2 id="cta-recetas-heading" class="text-3xl md:text-4xl font-bold text-white mb-5">
+                    ¿Listo para cocinar?<br />
+                    <span class="text-green-300">Consigue tu Mix Fresqo hoy</span>
+                </h2>
+                <p class="text-green-100/80 text-base md:text-lg mb-10 leading-relaxed">
+                    Todas estas recetas en tus manos en minutos. Fresco, limpio y listo para el wok.
+                    Primer pedido con <strong class="text-yellow-300">20% de descuento</strong>.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="/index.html#planes"
+                        class="btn-primary inline-flex items-center justify-center gap-2 bg-white text-green-900 font-bold px-10 py-4 rounded-full shadow-xl hover:bg-green-50 hover:shadow-2xl transition-all duration-300 text-base focus:outline-none focus:ring-4 focus:ring-white/50">
+                        Ver todos los planes →
+                    </a>
+                    <a href="https://wa.me/573001234567?text=Hola%2C%20vi%20las%20recetas%20de%20Chop%20Suey%20y%20quiero%20pedir%20el%20Mix%20de%20Verduras%20Fresqo%20🥡"
+                        target="_blank" rel="noopener noreferrer"
+                        class="inline-flex items-center justify-center gap-2 border-2 border-white/60 text-white font-bold px-10 py-4 rounded-full hover:bg-white/10 hover:border-white transition-all duration-300 text-base focus:outline-none focus:ring-4 focus:ring-white/30">
+                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                            <path
+                                d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+                        </svg>
+                        Pedir por WhatsApp
+                    </a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ============================================================
+         FOOTER
+         ============================================================ -->
+    <footer class="py-10" style="background: #1a3a14;" role="contentinfo">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p class="text-green-400/50 text-xs">
+                © 2026 Fresqo. Todos los derechos reservados. · Hecho con 💚 para tu bienestar
+            </p>
+        </div>
+    </footer>
+
+    <script type="module" src="/src/recetas.js"></script>
+</body>
+
+</html>

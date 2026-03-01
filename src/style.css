@@ -1,0 +1,68 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-green-900: #1a3a14;
+  --color-green-800: #2d5a27;
+  --color-green-700: #3d7a35;
+  --color-green-600: #4d9a42;
+  --color-green-500: #5cb050;
+  --color-green-400: #7cc470;
+  --color-green-300: #a3d89a;
+  --color-green-200: #c8ecbf;
+  --color-green-100: #e8f7e4;
+  --color-green-50:  #f2faf0;
+  --color-cream:     #faf7f0;
+  --color-accent:    #d4a017;
+  --font-sans: 'Poppins', sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-green-50);
+  color: #1a3a14;
+}
+
+/* Leaf floating animation */
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50%       { transform: translateY(-12px) rotate(5deg); }
+}
+.leaf-float { animation: float 5s ease-in-out infinite; }
+.leaf-float-delay { animation: float 5s ease-in-out 1.5s infinite; }
+
+/* Pulse badge */
+@keyframes pulse-scale {
+  0%, 100% { transform: scale(1); }
+  50%       { transform: scale(1.07); }
+}
+.badge-pulse { animation: pulse-scale 2.5s ease-in-out infinite; }
+
+/* Card hover */
+.plan-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.plan-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 24px 48px rgba(45, 90, 39, 0.2);
+}
+
+/* Shimmer button */
+.btn-primary {
+  position: relative;
+  overflow: hidden;
+}
+.btn-primary::after {
+  content: '';
+  position: absolute;
+  top: 0; left: -75%;
+  width: 50%; height: 100%;
+  background: linear-gradient(to right, transparent, rgba(255,255,255,0.25), transparent);
+  transform: skewX(-20deg);
+  transition: left 0.5s ease;
+}
+.btn-primary:hover::after { left: 125%; }
