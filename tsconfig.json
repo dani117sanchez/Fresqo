@@ -27,6 +27,6 @@
     "noUncheckedSideEffectImports": true
   },
   "include": [
-    "Fresqo/src"
+    "src"
   ]
 }
