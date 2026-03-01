@@ -164,10 +164,27 @@ document.addEventListener('DOMContentLoaded', () => {
     const menuBtn = document.getElementById('menu-toggle');
     const mobileMenu = document.getElementById('mobile-menu');
     if (menuBtn && mobileMenu) {
-        menuBtn.addEventListener('click', () => {
+        menuBtn.addEventListener('click', (e) => {
+            e.stopPropagation(); // Evitar que burbujee al document
             mobileMenu.classList.toggle('hidden');
             const isOpen = !mobileMenu.classList.contains('hidden');
             menuBtn.setAttribute('aria-expanded', String(isOpen));
+        });
+
+        // Cerrar al hacer click en un enlace del menú
+        mobileMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+                menuBtn.setAttribute('aria-expanded', 'false');
+            });
+        });
+
+        // Cerrar al tocar en cualquier otro lado de la pantalla
+        document.addEventListener('click', (e) => {
+            if (!mobileMenu.classList.contains('hidden') && !mobileMenu.contains(e.target) && !menuBtn.contains(e.target)) {
+                mobileMenu.classList.add('hidden');
+                menuBtn.setAttribute('aria-expanded', 'false');
+            }
         });
     }
 
